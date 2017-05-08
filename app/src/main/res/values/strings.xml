@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Drag Drop List</string>
+
+    <string name="list_item_1">Drag Drop Item 1</string>
+    <string name="list_item_2">Drag Drop Item 2</string>
+    <string name="list_item_3">Drag Drop Item 3</string>
+    <string name="list_item_4">Drag Drop Item 4</string>
+
 </resources>
