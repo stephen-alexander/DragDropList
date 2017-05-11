@@ -20,11 +20,9 @@ package com.sjalexander.dragdroplist;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.sjalexander.dragdroplist.ui.ListItem;
 import com.sjalexander.dragdroplist.ui.adapters.DragDropAdapter;
-import com.sjalexander.dragdroplist.ui.listeners.DragDropListener;
 import com.sjalexander.dragdroplist.ui.views.DragDropListView;
 
 import java.util.ArrayList;
@@ -56,26 +54,5 @@ public class MainActivity extends AppCompatActivity {
         adapter = new DragDropAdapter(this, listItems);
         cardList.setAdapter(adapter);
 
-        // Add listeners
-        cardList.setDragDropListener(dragDropListener);
     }
-
-    /**
-     * Initialise drag listener listener
-     */
-    private DragDropListener dragDropListener =
-            new DragDropListener() {
-
-                public void onDrag(int from, int to) {
-                    //Notify the adpter of the view's current location and which view to hide
-                    adapter.reorderList(from, to);
-                    adapter.notifyDataSetChanged();
-                }
-
-                public void onDrop(View itemView) {
-                    // When the drag is complete, re-show the original list item view
-                    itemView.setVisibility(View.VISIBLE);
-                    itemView.setPressed(false);
-                }
-            };
 }

@@ -33,7 +33,7 @@ import com.sjalexander.dragdroplist.R;
 import com.sjalexander.dragdroplist.ui.ListItem;
 
 /**
- *
+ * Drag and Drop list view adapter
  */
 public final class DragDropAdapter extends BaseAdapter {
 
@@ -47,14 +47,17 @@ public final class DragDropAdapter extends BaseAdapter {
 	 */
 	private int viewToHide = -1;
 
-    private int from = -1;
-    private int to = -1;
-
 	/**
 	 * The items held by the adaptor.
 	 */
 	protected static List<ListItem> items = new ArrayList<>();;
 
+    /**
+     * Constuctor
+     *
+     * @param activity The current activity
+     * @param items The items to be displayed
+     */
 	public DragDropAdapter(Activity activity, List<ListItem> items)
 	{
 		mInflater = LayoutInflater.from(activity);
@@ -62,24 +65,32 @@ public final class DragDropAdapter extends BaseAdapter {
 	}
 
     /**
+     * Get the number of items
      *
-     * @return
+     * @return the size of the items list
      */
 	public int getCount() {
 		return items.size();
 	}
 
+    /**
+     * Get an item from the list
+     *
+     * @param position The position of the item
+     * @return The item at the position
+     */
 	public ListItem getItem(int position) {
 		return items.get(position);
 	}
 
+    /**
+     * Get the item ID
+     *
+     * @param position The position of the item
+     * @return The item ID
+     */
 	public long getItemId(int position) {
 		return position;
-	}
-	
-	private void setViewToHide(int viewToHide)
-	{
-		this.viewToHide = viewToHide;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent)
@@ -112,12 +123,19 @@ public final class DragDropAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	public void reorderList(int from, int to) {
+	public void onDrag(int from, int to) {
         // Reorder the list
 		ListItem temp = items.get(from);
 		items.remove(from);
 		items.add(to, temp);
 
         this.viewToHide = to;
+		notifyDataSetChanged();
+	}
+
+	public void onDrop()
+	{
+		viewToHide = -1;
+		notifyDataSetChanged();
 	}
 }

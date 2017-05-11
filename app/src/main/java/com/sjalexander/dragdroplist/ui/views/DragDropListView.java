@@ -29,7 +29,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.sjalexander.dragdroplist.ui.listeners.DragDropListener;
+import com.sjalexander.dragdroplist.ui.adapters.DragDropAdapter;
 
 
 public class DragDropListView extends ListView {
@@ -39,7 +39,7 @@ public class DragDropListView extends ListView {
 	private int currentListPos;
 	private int touchOffset;
 	private ImageView dragView;
-	private DragDropListener dragDropListener;
+	private DragDropAdapter adapter;
 
     private WindowManager windowManager;
 
@@ -48,9 +48,10 @@ public class DragDropListView extends ListView {
         windowManager = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
 	}
 
-	public void setDragDropListener(DragDropListener dragDropListener) {
-		this.dragDropListener = dragDropListener;
-	}
+	public void setAdapter(DragDropAdapter adapter){
+        super.setAdapter(adapter);
+        this.adapter = adapter;
+    }
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
@@ -90,8 +91,8 @@ public class DragDropListView extends ListView {
 		case MotionEvent.ACTION_UP:
 		default:
 			isDrag = false;
-			if (dragDropListener != null)
-				dragDropListener.onDrop(getChildAt(currentListPos));
+			if (adapter != null)
+				adapter.onDrop();
 
             removeDragView();
 
@@ -150,11 +151,11 @@ public class DragDropListView extends ListView {
 
             // Calculate next list position of item
 			int nextListPos = pointToPosition(0,y);
-			if (dragDropListener != null && nextListPos != INVALID_POSITION)
+			if (adapter != null && nextListPos != INVALID_POSITION)
 			{
                 // Notify the listener
-                if (dragDropListener != null)
-					dragDropListener.onDrag(currentListPos, nextListPos);
+                if (adapter != null)
+                    adapter.onDrag(currentListPos, nextListPos);
 
 				currentListPos = nextListPos;
 			}
