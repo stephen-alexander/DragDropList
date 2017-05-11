@@ -31,24 +31,48 @@ import android.widget.ListView;
 
 import com.sjalexander.dragdroplist.ui.adapters.DragDropAdapter;
 
-
+/**
+ * Drag and Drop list view
+ */
 public class DragDropListView extends ListView {
 
+    /* Is currently dragging flag */
 	private boolean isDrag = false;
+
+    /* List position integers */
     private int startListPos;
 	private int currentListPos;
+
+    /* The offset used to calculate where to draw the drag view */
 	private int touchOffset;
+
+    /* The drag view */
 	private ImageView dragView;
+
+    /* Drag and Drop adapter */
 	private DragDropAdapter adapter;
 
+    /* window manager */
     private WindowManager windowManager;
 
+    /**
+     * Drag and Drop list view constructor
+     * @param context The activity context
+     * @param attrs The view Attribute Set
+     */
 	public DragDropListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+        // Get the window manager here so we don't have to keep getting it
         windowManager = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
 	}
 
+    /**
+     * Set the Drag and Drop adapter for the viw
+     * @param adapter The DragDropAdapter
+     */
 	public void setAdapter(DragDropAdapter adapter){
+        // Ensure the super is called
         super.setAdapter(adapter);
         this.adapter = adapter;
     }
@@ -60,10 +84,13 @@ public class DragDropListView extends ListView {
 
         if (action == MotionEvent.ACTION_DOWN)
         {
+            // Start dragging
 			isDrag = true;
             startListPos = pointToPosition(0,y);
 		}
 
+		// If we're not dragging and have pressed an
+        // invalid position pass the action on
 		if (!isDrag || startListPos == INVALID_POSITION)
         {
             return super.onTouchEvent(ev);
@@ -84,12 +111,14 @@ public class DragDropListView extends ListView {
 			break;
 
 		case MotionEvent.ACTION_MOVE:
+		    // drag view
 			performDrag(y);
 			break;
 
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
 		default:
+		    // cancel drag
 			isDrag = false;
 			if (adapter != null)
 				adapter.onDrop();
@@ -101,7 +130,12 @@ public class DragDropListView extends ListView {
 		return true;
 	}
 
-    // enable the drag view for dragging
+    /**
+     * Create the view to be dragged
+     *
+     * @param itemIndex The index of the view
+     * @param y The Y position to draw the view
+     */
     private void initialiseDragView(int itemIndex, int y)
     {
         // Get the view to be dragged
@@ -138,7 +172,11 @@ public class DragDropListView extends ListView {
         dragView = imageView;
     }
 
-	// move the drag view
+    /**
+     * Move the drag view
+     *
+     * @param y The current Y position
+     */
 	private void performDrag(int y) {
 		if (dragView != null)
 		{
@@ -153,7 +191,7 @@ public class DragDropListView extends ListView {
 			int nextListPos = pointToPosition(0,y);
 			if (adapter != null && nextListPos != INVALID_POSITION)
 			{
-                // Notify the listener
+                // Notify the adapter
                 if (adapter != null)
                     adapter.onDrag(currentListPos, nextListPos);
 
@@ -162,7 +200,9 @@ public class DragDropListView extends ListView {
 		}
 	}
 
-	// destroy performDrag view
+    /**
+     * Clean up the drag view
+     */
 	private void removeDragView() {
 		if (dragView != null) {
             dragView.setVisibility(INVISIBLE);

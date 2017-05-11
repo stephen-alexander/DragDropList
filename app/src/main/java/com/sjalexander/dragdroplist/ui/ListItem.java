@@ -19,22 +19,38 @@ under the License.
 package com.sjalexander.dragdroplist.ui;
 
 /**
- * Created by stephen.alexander on 24/04/2017.
+ * List view item object
  */
 public class ListItem {
+
+    /* Item resource locations */
     int nameRes;
     int iconRes;
 
+    /**
+     * Item constructor
+     *
+     * @param nameRes Name resource location
+     * @param iconRes Icon resource location
+     */
     public ListItem(int nameRes, int iconRes)
     {
         this.nameRes = nameRes;
         this.iconRes = iconRes;
     }
 
+    /**
+     * Get the name resource
+     * @return The name resource location
+     */
     public int getNameRes(){
         return nameRes;
     }
 
+    /**
+     * Get the icon resource
+     * @return The icon resource location
+     */
     public int getIconRes(){
         return iconRes;
     }

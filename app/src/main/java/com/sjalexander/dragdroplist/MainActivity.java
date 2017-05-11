@@ -30,16 +30,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DragDropListView cardList;
+    private DragDropListView listView;
     private DragDropAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cardList = (DragDropListView) findViewById(R.id.list_view);
+        listView = (DragDropListView) findViewById(R.id.list_view);
         updateList();
     }
+
 
     private void updateList()
     {
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up the list view adapter
         adapter = new DragDropAdapter(this, listItems);
-        cardList.setAdapter(adapter);
+        listView.setAdapter(adapter);
 
     }
 }

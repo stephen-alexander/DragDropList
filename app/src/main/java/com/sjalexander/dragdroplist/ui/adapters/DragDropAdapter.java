@@ -95,18 +95,17 @@ public final class DragDropAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
+        //Create the view
         convertView = mInflater.inflate(R.layout.list_item, null);
         convertView.setBackgroundResource(R.drawable.selectable_background);
-        ListItem item = (ListItem) getItem(position);
+        ListItem item = getItem(position);
 
-        ImageView icon = (ImageView) convertView.findViewById(R.id.cardIcon);
+        ImageView icon = (ImageView) convertView.findViewById(R.id.icon);
 
         icon.setImageResource(item.getIconRes());
 
-        TextView serviceProviderLabel = (TextView) convertView.findViewById(R.id.serviceproviderName);
-        serviceProviderLabel.setText(item.getNameRes());
-
-        convertView.setTag(getItem(position).getNameRes());
+        TextView name = (TextView) convertView.findViewById(R.id.name);
+        name.setText(item.getNameRes());
 
 		// Check if we are to hide the view
 		if (viewToHide == position)
@@ -123,18 +122,28 @@ public final class DragDropAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+    /**
+     * Call to notify the adapter a list item had been dragged into another position
+     * @param from The items original position
+     * @param to The items new position
+     */
 	public void onDrag(int from, int to) {
         // Reorder the list
 		ListItem temp = items.get(from);
 		items.remove(from);
 		items.add(to, temp);
 
+        // Set which list position to be hidden and notify of the change
         this.viewToHide = to;
 		notifyDataSetChanged();
 	}
 
+    /**
+     * Call to notify the view has been dropped
+     */
 	public void onDrop()
 	{
+        // clear the view to be hidden and notify of the change
 		viewToHide = -1;
 		notifyDataSetChanged();
 	}
