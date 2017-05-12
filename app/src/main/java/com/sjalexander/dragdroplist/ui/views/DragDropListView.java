@@ -37,107 +37,105 @@ import com.sjalexander.dragdroplist.ui.adapters.DragDropAdapter;
 public class DragDropListView extends ListView {
 
     /* Is currently dragging flag */
-	private boolean isDrag = false;
+    private boolean isDrag = false;
 
     /* List position integers */
     private int startListPos;
-	private int currentListPos;
+    private int currentListPos;
 
     /* The offset used to calculate where to draw the drag view */
-	private int touchOffset;
+    private int touchOffset;
 
     /* The drag view */
-	private ImageView dragView;
+    private ImageView dragView;
 
     /* Drag and Drop adapter */
-	private DragDropAdapter adapter;
+    private DragDropAdapter adapter;
 
     /* window manager */
     private WindowManager windowManager;
 
     /**
      * Drag and Drop list view constructor
+     *
      * @param context The activity context
-     * @param attrs The view Attribute Set
+     * @param attrs   The view Attribute Set
      */
-	public DragDropListView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+    public DragDropListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         // Get the window manager here so we don't have to keep getting it
-        windowManager = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
-	}
+        windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+    }
 
     /**
      * Set the Drag and Drop adapter for the viw
+     *
      * @param adapter The DragDropAdapter
      */
-	public void setAdapter(DragDropAdapter adapter){
+    public void setAdapter(DragDropAdapter adapter) {
         // Ensure the super is called
         super.setAdapter(adapter);
         this.adapter = adapter;
     }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		int action = ev.getAction();
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        int action = ev.getAction();
         int y = (int) ev.getY();
 
-        if (action == MotionEvent.ACTION_DOWN)
-        {
+        if (action == MotionEvent.ACTION_DOWN) {
             // Start dragging
-			isDrag = true;
-            startListPos = pointToPosition(0,y);
-		}
+            isDrag = true;
+            startListPos = pointToPosition(0, y);
+        }
 
-		// If we're not dragging and have pressed an
+        // If we're not dragging and have pressed an
         // invalid position pass the action on
-		if (!isDrag || startListPos == INVALID_POSITION)
-        {
+        if (!isDrag || startListPos == INVALID_POSITION) {
             return super.onTouchEvent(ev);
         }
-        
-		switch (action)
-        {
-		case MotionEvent.ACTION_DOWN:
-		    // Set the current list position of the item
-            currentListPos = startListPos;
 
-            // Calculate the Y offset of the touch from the view top
-            touchOffset = y - getChildAt(currentListPos).getTop();
-            touchOffset -= ((int)ev.getRawY()) - y;
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                // Set the current list position of the item
+                currentListPos = startListPos;
 
-            // Prepare for performDrag
-            initialiseDragView(currentListPos, y);
-			break;
+                // Calculate the Y offset of the touch from the view top
+                touchOffset = y - getChildAt(currentListPos).getTop();
+                touchOffset -= ((int) ev.getRawY()) - y;
 
-		case MotionEvent.ACTION_MOVE:
-		    // drag view
-			performDrag(y);
-			break;
+                // Prepare for performDrag
+                initialiseDragView(currentListPos, y);
+                break;
 
-		case MotionEvent.ACTION_CANCEL:
-		case MotionEvent.ACTION_UP:
-		default:
-		    // cancel drag
-			isDrag = false;
-			if (adapter != null)
-				adapter.onDrop();
+            case MotionEvent.ACTION_MOVE:
+                // drag view
+                performDrag(y);
+                break;
 
-            removeDragView();
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+            default:
+                // cancel drag
+                isDrag = false;
+                if (adapter != null)
+                    adapter.onDrop();
 
-			break;
-		}
-		return true;
-	}
+                removeDragView();
+
+                break;
+        }
+        return true;
+    }
 
     /**
      * Create the view to be dragged
      *
      * @param itemIndex The index of the view
-     * @param y The Y position to draw the view
+     * @param y         The Y position to draw the view
      */
-    private void initialiseDragView(int itemIndex, int y)
-    {
+    private void initialiseDragView(int itemIndex, int y) {
         // Get the view to be dragged
         View item = getChildAt(itemIndex);
         item.setPressed(true);
@@ -177,38 +175,36 @@ public class DragDropListView extends ListView {
      *
      * @param y The current Y position
      */
-	private void performDrag(int y) {
-		if (dragView != null)
-		{
+    private void performDrag(int y) {
+        if (dragView != null) {
             // Update Y position of view
-			WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) dragView.getLayoutParams();
-			layoutParams.y = y - touchOffset;
+            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) dragView.getLayoutParams();
+            layoutParams.y = y - touchOffset;
             layoutParams.x = 0;
 
-			windowManager.updateViewLayout(dragView, layoutParams);
+            windowManager.updateViewLayout(dragView, layoutParams);
 
             // Calculate next list position of item
-			int nextListPos = pointToPosition(0,y);
-			if (adapter != null && nextListPos != INVALID_POSITION)
-			{
+            int nextListPos = pointToPosition(0, y);
+            if (adapter != null && nextListPos != INVALID_POSITION) {
                 // Notify the adapter
                 if (adapter != null)
                     adapter.onDrag(currentListPos, nextListPos);
 
-				currentListPos = nextListPos;
-			}
-		}
-	}
+                currentListPos = nextListPos;
+            }
+        }
+    }
 
     /**
      * Clean up the drag view
      */
-	private void removeDragView() {
-		if (dragView != null) {
+    private void removeDragView() {
+        if (dragView != null) {
             dragView.setVisibility(INVISIBLE);
-			windowManager.removeView(dragView);
-			dragView.setImageDrawable(null);
-			dragView = null;
-		}
-	}
+            windowManager.removeView(dragView);
+            dragView.setImageDrawable(null);
+            dragView = null;
+        }
+    }
 }

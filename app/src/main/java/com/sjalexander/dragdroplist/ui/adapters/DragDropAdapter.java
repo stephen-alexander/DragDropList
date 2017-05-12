@@ -37,41 +37,41 @@ import com.sjalexander.dragdroplist.ui.ListItem;
  */
 public final class DragDropAdapter extends BaseAdapter {
 
-	/**
-	 * The layout inflater
-	 */
-	private LayoutInflater mInflater;
+    /**
+     * The layout inflater
+     */
+    private LayoutInflater mInflater;
 
-	/**
-	 * The view to hide when in drag mode
-	 */
-	private int viewToHide = -1;
+    /**
+     * The view to hide when in drag mode
+     */
+    private int viewToHide = -1;
 
-	/**
-	 * The items held by the adaptor.
-	 */
-	protected static List<ListItem> items = new ArrayList<>();;
+    /**
+     * The items held by the adaptor.
+     */
+    protected static List<ListItem> items = new ArrayList<>();
+    ;
 
     /**
      * Constuctor
      *
      * @param activity The current activity
-     * @param items The items to be displayed
+     * @param items    The items to be displayed
      */
-	public DragDropAdapter(Activity activity, List<ListItem> items)
-	{
-		mInflater = LayoutInflater.from(activity);
-		this.items = items;
-	}
+    public DragDropAdapter(Activity activity, List<ListItem> items) {
+        mInflater = LayoutInflater.from(activity);
+        this.items = items;
+    }
 
     /**
      * Get the number of items
      *
      * @return the size of the items list
      */
-	public int getCount() {
-		return items.size();
-	}
+    public int getCount() {
+        return items.size();
+    }
 
     /**
      * Get an item from the list
@@ -79,9 +79,9 @@ public final class DragDropAdapter extends BaseAdapter {
      * @param position The position of the item
      * @return The item at the position
      */
-	public ListItem getItem(int position) {
-		return items.get(position);
-	}
+    public ListItem getItem(int position) {
+        return items.get(position);
+    }
 
     /**
      * Get the item ID
@@ -89,12 +89,11 @@ public final class DragDropAdapter extends BaseAdapter {
      * @param position The position of the item
      * @return The item ID
      */
-	public long getItemId(int position) {
-		return position;
-	}
+    public long getItemId(int position) {
+        return position;
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
+    public View getView(int position, View convertView, ViewGroup parent) {
         //Create the view
         convertView = mInflater.inflate(R.layout.list_item, null);
         convertView.setBackgroundResource(R.drawable.selectable_background);
@@ -107,44 +106,42 @@ public final class DragDropAdapter extends BaseAdapter {
         TextView name = (TextView) convertView.findViewById(R.id.name);
         name.setText(item.getNameRes());
 
-		// Check if we are to hide the view
-		if (viewToHide == position)
-		{
+        // Check if we are to hide the view
+        if (viewToHide == position) {
             convertView.setVisibility(View.INVISIBLE);
         }
         // If not, check if the view is already hidden,
         // If so, make the view visible
-        else if (convertView.getVisibility() == View.INVISIBLE)
-        {
+        else if (convertView.getVisibility() == View.INVISIBLE) {
             convertView.setVisibility(View.VISIBLE);
         }
 
-		return convertView;
-	}
+        return convertView;
+    }
 
     /**
      * Call to notify the adapter a list item had been dragged into another position
+     *
      * @param from The items original position
-     * @param to The items new position
+     * @param to   The items new position
      */
-	public void onDrag(int from, int to) {
+    public void onDrag(int from, int to) {
         // Reorder the list
-		ListItem temp = items.get(from);
-		items.remove(from);
-		items.add(to, temp);
+        ListItem temp = items.get(from);
+        items.remove(from);
+        items.add(to, temp);
 
         // Set which list position to be hidden and notify of the change
         this.viewToHide = to;
-		notifyDataSetChanged();
-	}
+        notifyDataSetChanged();
+    }
 
     /**
      * Call to notify the view has been dropped
      */
-	public void onDrop()
-	{
+    public void onDrop() {
         // clear the view to be hidden and notify of the change
-		viewToHide = -1;
-		notifyDataSetChanged();
-	}
+        viewToHide = -1;
+        notifyDataSetChanged();
+    }
 }

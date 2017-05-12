@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void updateList()
-    {
+    private void updateList() {
         // Initialise list items
         List<ListItem> listItems = new ArrayList<>();
         listItems.add(new ListItem(R.string.list_item_1, R.mipmap.ic_launcher));

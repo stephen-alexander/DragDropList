@@ -33,25 +33,26 @@ public class ListItem {
      * @param nameRes Name resource location
      * @param iconRes Icon resource location
      */
-    public ListItem(int nameRes, int iconRes)
-    {
+    public ListItem(int nameRes, int iconRes) {
         this.nameRes = nameRes;
         this.iconRes = iconRes;
     }
 
     /**
      * Get the name resource
+     *
      * @return The name resource location
      */
-    public int getNameRes(){
+    public int getNameRes() {
         return nameRes;
     }
 
     /**
      * Get the icon resource
+     *
      * @return The icon resource location
      */
-    public int getIconRes(){
+    public int getIconRes() {
         return iconRes;
     }
 }
