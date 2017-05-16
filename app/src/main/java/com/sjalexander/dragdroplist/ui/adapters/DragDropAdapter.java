@@ -40,7 +40,7 @@ public final class DragDropAdapter extends BaseAdapter {
     /**
      * The layout inflater
      */
-    private LayoutInflater mInflater;
+    private LayoutInflater inflater;
 
     /**
      * The view to hide when in drag mode
@@ -60,7 +60,7 @@ public final class DragDropAdapter extends BaseAdapter {
      * @param items    The items to be displayed
      */
     public DragDropAdapter(Activity activity, List<ListItem> items) {
-        mInflater = LayoutInflater.from(activity);
+        inflater = LayoutInflater.from(activity);
         this.items = items;
     }
 
@@ -95,7 +95,7 @@ public final class DragDropAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         //Create the view
-        convertView = mInflater.inflate(R.layout.list_item, null);
+        convertView = inflater.inflate(R.layout.list_item, null);
         convertView.setBackgroundResource(R.drawable.selectable_background);
         ListItem item = getItem(position);
 

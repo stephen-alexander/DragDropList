@@ -83,11 +83,12 @@ public class DragDropListView extends ListView {
     public boolean onTouchEvent(MotionEvent ev) {
         int action = ev.getAction();
         int y = (int) ev.getY();
+        int x = (int) ev.getX();
 
         if (action == MotionEvent.ACTION_DOWN) {
             // Start dragging
             isDrag = true;
-            startListPos = pointToPosition(0, y);
+            startListPos = pointToPosition(x, y);
         }
 
         // If we're not dragging and have pressed an
@@ -148,7 +149,7 @@ public class DragDropListView extends ListView {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
 
         // Set the initial view position, taking into account the Y touch offset
-        layoutParams.x = 0;
+        layoutParams.x = (int) getX();
         layoutParams.y = y - touchOffset;
         layoutParams.gravity = Gravity.TOP;
 
@@ -180,12 +181,11 @@ public class DragDropListView extends ListView {
             // Update Y position of view
             WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) dragView.getLayoutParams();
             layoutParams.y = y - touchOffset;
-            layoutParams.x = 0;
 
             windowManager.updateViewLayout(dragView, layoutParams);
 
             // Calculate next list position of item
-            int nextListPos = pointToPosition(0, y);
+            int nextListPos = pointToPosition((int)dragView.getX(), y);
             if (adapter != null && nextListPos != INVALID_POSITION) {
                 // Notify the adapter
                 if (adapter != null)
